@@ -1,3 +1,4 @@
+import { updateDB } from '@/app/actions';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
@@ -50,7 +51,7 @@ export async function POST(req: Request): Promise<Response> {
   const { id } = evt.data;
   const eventType = evt.type;
 
-  // await updateDB();
+  updateDB();
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log('Webhook body:', body);
