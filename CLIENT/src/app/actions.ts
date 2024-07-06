@@ -52,7 +52,7 @@ export async function postDataToBE(input: string | undefined): Promise<void> {
   }
 }
 
-export async function updateDB() {
+export async function updateDB(input: string) {
   const response = await fetch(
     'https://forging-dev-auth.vercel.app/api/database',
     {
@@ -60,7 +60,7 @@ export async function updateDB() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data: 'alo alo alo' }),
+      body: JSON.stringify({ data: input }),
     }
   );
 

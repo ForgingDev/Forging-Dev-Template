@@ -51,20 +51,24 @@ export async function POST(req: Request): Promise<Response> {
   const { id } = evt.data;
   const eventType = evt.type;
 
-  await updateDB();
-
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log('Webhook body:', body);
 
   if (evt.type === 'user.created') {
+    await updateDB('Created');
+
     console.log('user created:', evt.data);
   }
 
   if (evt.type === 'user.updated') {
+    await updateDB('Updated');
+
     console.log('user updated:', evt.data);
   }
 
   if (evt.type === 'user.deleted') {
+    await updateDB('Deleted');
+
     console.log('user deleted:', evt.data);
   }
 
