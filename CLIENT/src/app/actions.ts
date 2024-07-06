@@ -51,3 +51,15 @@ export async function postDataToBE(input: string | undefined): Promise<void> {
     console.log(error);
   }
 }
+
+export async function updateDB() {
+  const response = await fetch('/api/database', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data: 'alo alo alo' }),
+  });
+
+  console.log(await response.json());
+}

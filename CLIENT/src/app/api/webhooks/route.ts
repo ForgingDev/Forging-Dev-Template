@@ -1,9 +1,9 @@
+import { updateDB } from '@/app/actions';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 
 export async function POST(req: Request): Promise<Response> {
-  // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -55,8 +55,18 @@ export async function POST(req: Request): Promise<Response> {
   console.log('Webhook body:', body);
 
   if (evt.type === 'user.created') {
-    console.log('userId:', evt.data.id);
+    console.log('user created:', evt.data);
   }
 
-  return new Response('', { status: 200 });
+  if (evt.type === 'user.updated') {
+    await updateDB();
+
+    console.log('user updated:', evt.data);
+  }
+
+  if (evt.type === 'user.deleted') {
+    console.log('user deleted:', evt.data);
+  }
+
+  return new Response('Alo alo 2 10 2 10', { status: 200 });
 }
