@@ -53,16 +53,11 @@ export async function postDataToBE(input: string | undefined): Promise<void> {
 }
 
 export async function updateDB(input: string) {
-  const response = await fetch(
-    'https://forging-dev-auth.vercel.app/api/database',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data: input }),
-    }
-  );
-
-  console.log(await response.json());
+  await fetch('https://forging-dev-auth.vercel.app/api/database', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data: input }),
+  });
 }
