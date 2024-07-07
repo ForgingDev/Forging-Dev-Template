@@ -1,12 +1,12 @@
 'use client';
 
-import { useNotifications } from '@/data/stores/useNotifications';
+import { useNotificationsStore } from '@/data/stores/useNotificationsStore';
 import { Toast } from 'primereact/toast';
 import { FC, useCallback, useEffect, useRef } from 'react';
 
 const FGNotification: FC = () => {
   const toast = useRef<Toast>(null);
-  const { noitification } = useNotifications();
+  const { noitification } = useNotificationsStore();
 
   const showNotification = useCallback(() => {
     if (!noitification) return;

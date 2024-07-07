@@ -1,18 +1,7 @@
-import { FC, Suspense } from 'react';
-import FetchData from './FetchData';
-import TestDB from './TestDB';
-import TriggerFetchData from './TriggerFetchData';
+import { FC } from 'react';
 
 const Homepage: FC = () => {
-  return (
-    <>
-      <TriggerFetchData />
-      <Suspense fallback={<div>Loading fetch data...</div>}>
-        <FetchData />
-      </Suspense>
-      <TestDB />
-    </>
-  );
+  return <>Main Page</>;
 };
 
 export default Homepage;
