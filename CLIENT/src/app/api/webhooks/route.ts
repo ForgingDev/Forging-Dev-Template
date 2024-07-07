@@ -49,10 +49,15 @@ export async function POST(req: Request) {
     });
   }
 
-  const { id } = evt.data;
   const eventType = evt.type;
 
-  updateDB(`Webhook ${id} of type ${eventType} received`);
+  if (eventType === 'user.created') {
+    await updateDB(`User Created with name ${evt.data.first_name}`);
+  } else if (eventType === 'user.updated') {
+    await updateDB(`User Updated with name ${evt.data.first_name}`);
+  } else if (eventType === 'user.deleted') {
+    await updateDB(`User Deleted with name ${evt.data.id}`);
+  }
 
   return new Response('', { status: 200 });
 }
