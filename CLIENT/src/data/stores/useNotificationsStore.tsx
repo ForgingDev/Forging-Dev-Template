@@ -9,7 +9,7 @@ type Actions = {
   showNotification: (type: ToastMessage) => void;
 };
 
-export const useNotifications = create<TNotificationsState & Actions>()(
+export const useNotificationsStore = create<TNotificationsState & Actions>()(
   set => ({
     noitification: undefined,
     showNotification: type => set({ noitification: type }),
