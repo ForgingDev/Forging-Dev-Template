@@ -1,6 +1,8 @@
 import { Client } from 'pg'; // Import the Client class
 
 export async function POST(req: Request): Promise<Response> {
+  const data = await req.json();
+
   // Create a new client instance with the connection string from environment variables
   const client = new Client({
     connectionString: process.env.DATABASE_CONNECTION_STRING,
@@ -12,8 +14,7 @@ export async function POST(req: Request): Promise<Response> {
 
     console.log('-------- CONNECTED -------------');
 
-    // Perform the insert operation - ensure you replace 'your_table' and the column names with your actual table and columns
-    const queryText = `INSERT INTO test(label) VALUES('Salamiooorrrrr');`;
+    const queryText = `INSERT INTO test(label) VALUES('${data.data}');`;
     const res = await client.query(queryText);
 
     // Close the client connection

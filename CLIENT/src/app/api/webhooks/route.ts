@@ -55,19 +55,19 @@ export async function POST(req: Request): Promise<Response> {
   console.log('Webhook body:', body);
 
   if (evt.type === 'user.created') {
-    await updateDB('Created');
+    await updateDB(`Created ${evt.data.email_addresses[0].email_address}`);
 
     console.log('user created:', evt.data);
   }
 
   if (evt.type === 'user.updated') {
-    await updateDB('Updated');
+    await updateDB(`Updated ${evt.data.email_addresses[0].email_address}`);
 
     console.log('user updated:', evt.data);
   }
 
   if (evt.type === 'user.deleted') {
-    await updateDB('Deleted');
+    await updateDB(`Deleted ${evt.data.id}`);
 
     console.log('user deleted:', evt.data);
   }

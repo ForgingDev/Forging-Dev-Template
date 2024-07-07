@@ -9,7 +9,7 @@ const TestDB = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ data: 'alo alo alo' }),
+          body: JSON.stringify({ data: 'alo?' }),
         });
 
         console.log(await response.json());
