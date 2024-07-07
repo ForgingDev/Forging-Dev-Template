@@ -1,3 +1,5 @@
+using Npgsql;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+var connectionString = builder.Configuration["ConnectionStrings:SupabaseDb"];
+builder.Services.AddSingleton<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
 
 var app = builder.Build();
 
