@@ -27,8 +27,8 @@ export async function POST(req: Request): Promise<Response> {
       },
       status: 200,
     });
-  } catch (err: any) {
-    console.error('Database connection error', err.stack);
+  } catch (err) {
+    console.error('Database connection error');
 
     // Close the client connection in case of error
     await client.end();

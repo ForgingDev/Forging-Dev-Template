@@ -32,7 +32,10 @@
   },
   "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
-    // "max-len": ["warn", { "code": 30}],
+    "max-lines": [
+      "warn",
+      { "max": 200, "skipBlankLines": true, "skipComments": true }
+    ],
     "no-extra-boolean-cast": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
