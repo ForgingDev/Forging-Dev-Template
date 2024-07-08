@@ -1,7 +1,7 @@
 'use client';
 
 import { useGlobalDialogsStore } from '@/data/stores/useGlobalDialogsStore';
-import { GlobalDialogsEnum } from '@/data/types';
+import { GlobalDialogsEnum } from '@/data/types/global-dialogs.types';
 import { FC } from 'react';
 
 const FGBackgroundDialog: FC = () => {

@@ -1,8 +1,6 @@
-import FGNavbar from '@/components/FGLibrary/FGNavbar/FGNavbar';
 import FGNotification from '@/components/FGLibrary/FGNotification';
+import FGSidebar from '@/components/FGLibrary/FGSidebar/FGSidebar';
 import GlobalDialogs from '@/components/GlobalDialogs';
-import { TLink } from '@/data/types';
-import { ROUTES } from '@/lib/routes';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -25,14 +23,12 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>): JSX.Element {
-  const LINKS: TLink[] = [{ name: 'Home', href: ROUTES.HOME_ROUTE }];
-
   return (
     <ClerkProvider>
       <PrimeReactProvider>
         <html lang='en'>
           <body className={inter.className}>
-            <FGNavbar links={LINKS} />
+            <FGSidebar />
             <GlobalDialogs />
             <FGNotification />
             <HydrationBoundary>

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GlobalDialogsEnum } from '../types';
+import { GlobalDialogsEnum } from '../types/global-dialogs.types';
 
 type TGlobalDialogsState = {
   dialog: GlobalDialogsEnum | undefined;

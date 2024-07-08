@@ -9,3 +9,21 @@
 a {
   @apply text-primary-normal;
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply opacity-0;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-none;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
+}
