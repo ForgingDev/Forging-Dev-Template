@@ -1,6 +1,7 @@
 import FGNotification from '@/components/FGLibrary/FGNotification';
 import FGSidebar from '@/components/FGLibrary/FGSidebar/FGSidebar';
 import GlobalDialogs from '@/components/GlobalDialogs';
+import { cn } from '@/lib/utils';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -27,7 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <PrimeReactProvider>
         <html lang='en'>
-          <body className={inter.className}>
+          <body className={cn(inter.className, 'bg-zinc-800 text-white')}>
             <FGSidebar />
             <GlobalDialogs />
             <FGNotification />

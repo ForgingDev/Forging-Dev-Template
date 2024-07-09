@@ -55,6 +55,7 @@ const FGSidebarMobile: FC<Props> = ({
           Forging Dev
         </Link>
         <ChevronsRight
+          aria-label='close-sidebar'
           className='cursor-pointer transition-all hover:text-white'
           onClick={() => setOpenedNavbar(false)}
         />

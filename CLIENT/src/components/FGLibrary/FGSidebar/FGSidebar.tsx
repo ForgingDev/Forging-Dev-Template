@@ -48,7 +48,9 @@ const FGSidebar: FC = () => {
           setOpenedNavbar={setOpenedNavbar}
         />
         <ChevronsLeft
-          aria-label='open-navbar'
+          id='chevron-left'
+          className='cursor-pointer'
+          aria-label='open-sidebar'
           onClick={() => setOpenedNavbar(true)}
         />
       </div>

@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import { FC } from 'react';
+import FGTooltip from '../../FGTooltip';
 import FGSubSidebarItem from './FGSubSidebarItem';
 
 type Props = {
@@ -40,9 +41,27 @@ const FGSidebarItem: FC<Props> = ({
         </div>
         {hasSubItems ? (
           isNavbarItemSelected ? (
-            <ChevronUp />
+            <>
+              <ChevronUp
+                id='chevron'
+                aria-label='close-sub-items'
+              />
+              <FGTooltip
+                target='#chevron'
+                content='show less'
+              />
+            </>
           ) : (
-            <ChevronDown />
+            <>
+              <ChevronDown
+                id='chevron'
+                aria-label='open-sub-items'
+              />
+              <FGTooltip
+                target='#chevron'
+                content='show more'
+              />
+            </>
           )
         ) : null}
       </Link>
