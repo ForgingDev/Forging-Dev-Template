@@ -21,7 +21,7 @@ export async function updateUser(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ updateUserDto: user }),
+    body: JSON.stringify({ ...user }),
   });
 }
 
