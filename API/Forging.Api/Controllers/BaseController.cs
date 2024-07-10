@@ -10,35 +10,50 @@ namespace Forging.Api.Controllers
     [Route("[controller]")]
     public class BaseController : Controller
     {
-        private readonly NpgsqlConnection _connection;
+        private readonly IConfiguration _configuration;
 
-        public BaseController(NpgsqlConnection connection)
+        public BaseController(IConfiguration configuration)
         {
-            _connection = connection;
+            _configuration = configuration;
+        }
+
+        private NpgsqlConnection GetConnection()
+        {
+            var connectionString =
+                @$"Host={_configuration["DATABASE_HOST_SUPABASE"]};
+                                    Port={_configuration["DATABASE_PORT_SUPABASE"]};
+                                    Database={_configuration["DEFAULT_DATABASE_NAME"]};
+                                    User Id={_configuration["DATABASE_USERNAME_SUPABASE"]};
+                                    Password={_configuration["DATABASE_PASSWORD_SUPABASE"]};";
+            return new NpgsqlConnection(connectionString);
         }
 
         [HttpGet("/users")]
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            await _connection.OpenAsync();
+            await using var connection = GetConnection();
 
-            var users = await _connection.QueryAsync<User>("SELECT * FROM users");
+            await connection.OpenAsync();
 
-            await _connection.CloseAsync();
-            return users;
+            var users = await connection.QueryAsync<User>("SELECT * FROM users");
+
+            await connection.CloseAsync();
+            return Ok(users);
         }
 
         [HttpGet("/users/{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
-            await _connection.OpenAsync();
+            await using var connection = GetConnection();
 
-            var user = await _connection.QueryFirstOrDefaultAsync<User>(
+            await connection.OpenAsync();
+
+            var user = await connection.QueryFirstOrDefaultAsync<User>(
                 "SELECT * FROM users WHERE id = @Id",
                 new { Id = id }
             );
 
-            await _connection.CloseAsync();
+            await connection.CloseAsync();
 
             if (user == null)
             {
@@ -50,7 +65,9 @@ namespace Forging.Api.Controllers
         [HttpPost("/users")]
         public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
         {
-            await _connection.OpenAsync();
+            using var connection = GetConnection();
+
+            await connection.OpenAsync();
 
             var usersSql =
                 @"INSERT INTO users (id, username, description, email, first_name, last_name, phone_number, image_url) 
@@ -69,18 +86,18 @@ namespace Forging.Api.Controllers
                 JoinedAt = DateTime.UtcNow
             };
 
-            using (var transaction = _connection.BeginTransaction())
+            using (var transaction = connection.BeginTransaction())
             {
                 try
                 {
-                    var result = await _connection.ExecuteAsync(usersSql, newUser, transaction);
+                    var result = await connection.ExecuteAsync(usersSql, newUser, transaction);
                     if (result > 0)
                     {
                         foreach (var email in newUser.Email)
                         {
                             var emailSql =
                                 @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
-                            var insertEmailResult = await _connection.ExecuteAsync(
+                            var insertEmailResult = await connection.ExecuteAsync(
                                 emailSql,
                                 new
                                 {
@@ -102,7 +119,7 @@ namespace Forging.Api.Controllers
                         {
                             var phoneNrSql =
                                 @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
-                            var phoneNumberResult = await _connection.ExecuteAsync(
+                            var phoneNumberResult = await connection.ExecuteAsync(
                                 phoneNrSql,
                                 new
                                 {
@@ -121,7 +138,7 @@ namespace Forging.Api.Controllers
                         }
 
                         transaction.Commit();
-                        await _connection.CloseAsync();
+                        await connection.CloseAsync();
                         return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
                     }
                     else
@@ -141,8 +158,10 @@ namespace Forging.Api.Controllers
         [HttpPut("/users/{id}")]
         public async Task<ActionResult<User>> UpdateUser(Guid id, UpdateUserDto updateUserDto)
         {
-            await _connection.OpenAsync();
-            using (var transaction = _connection.BeginTransaction())
+            using var connection = GetConnection();
+
+            await connection.OpenAsync();
+            using (var transaction = connection.BeginTransaction())
             {
                 try
                 {
@@ -152,7 +171,7 @@ namespace Forging.Api.Controllers
                       last_name = @LastName, phone_number = @PhoneNumber, image_url = @ImageUrl 
                       WHERE id = @Id";
 
-                    var result = await _connection.ExecuteAsync(
+                    var result = await connection.ExecuteAsync(
                         usersSql,
                         new
                         {
@@ -173,12 +192,12 @@ namespace Forging.Api.Controllers
                         var deletePhoneNrSql =
                             @"DELETE FROM user_phone_numbers WHERE user_id = @UserId";
 
-                        await _connection.ExecuteAsync(
+                        await connection.ExecuteAsync(
                             deleteEmailSql,
                             new { UserId = id },
                             transaction
                         );
-                        await _connection.ExecuteAsync(
+                        await connection.ExecuteAsync(
                             deletePhoneNrSql,
                             new { UserId = id },
                             transaction
@@ -188,7 +207,7 @@ namespace Forging.Api.Controllers
                         {
                             var insertEmailSql =
                                 @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
-                            var EmailResponse = _connection.ExecuteAsync(
+                            var EmailResponse = connection.ExecuteAsync(
                                 insertEmailSql,
                                 new
                                 {
@@ -210,7 +229,7 @@ namespace Forging.Api.Controllers
                         {
                             var insertPhoneNrSql =
                                 @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
-                            var PhoneNumberResponse = _connection.ExecuteAsync(
+                            var PhoneNumberResponse = connection.ExecuteAsync(
                                 insertPhoneNrSql,
                                 new
                                 {
@@ -228,7 +247,7 @@ namespace Forging.Api.Controllers
                             }
                         }
                         transaction.Commit();
-                        await _connection.CloseAsync();
+                        await connection.CloseAsync();
                         return NoContent();
                     }
                     else
@@ -248,14 +267,16 @@ namespace Forging.Api.Controllers
         [HttpDelete("/users/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _connection.OpenAsync();
+            using var connection = GetConnection();
 
-            var result = await _connection.ExecuteAsync(
+            await connection.OpenAsync();
+
+            var result = await connection.ExecuteAsync(
                 "DELETE FROM users WHERE id = @Id",
                 new { Id = id }
             );
 
-            await _connection.CloseAsync();
+            await connection.CloseAsync();
             if (result > 0)
             {
                 return NoContent();

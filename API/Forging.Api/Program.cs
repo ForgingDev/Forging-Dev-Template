@@ -19,21 +19,18 @@ builder.Services.AddCors(opt =>
         "CorsPolicy",
         policy =>
         {
-            policy
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .WithOrigins("*");
+            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("*");
         }
     );
 });
 
 var connectionString =
     @$"Host={builder.Configuration["DATABASE_HOST_SUPABASE"]};
-                          Port={builder.Configuration["DATABASE_PORT_SUPABASE"]};
-                          Database={builder.Configuration["DEFAULT_DATABASE_NAME"]};
-                          User Id={builder.Configuration["DATABASE_USERNAME_SUPABASE"]};
-                          Password={builder.Configuration["DATABASE_PASSWORD_SUPABASE"]};";
-builder.Services.AddSingleton<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
+                        Port={builder.Configuration["DATABASE_PORT_SUPABASE"]};
+                        Database={builder.Configuration["DEFAULT_DATABASE_NAME"]};
+                        User Id={builder.Configuration["DATABASE_USERNAME_SUPABASE"]};
+                        Password={builder.Configuration["DATABASE_PASSWORD_SUPABASE"]};";
+builder.Services.AddTransient<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
 
 var map = new CustomPropertyTypeMap(
     typeof(User),
