@@ -13,6 +13,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(
+        "CorsPolicy",
+        policy =>
+        {
+            policy
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("https://forging-dev-auth.vercel.app/");
+        }
+    );
+});
+
 var connectionString =
     @$"Host={builder.Configuration["DATABASE_HOST_SUPABASE"]};
                           Port={builder.Configuration["DATABASE_PORT_SUPABASE"]};
@@ -45,6 +59,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 app.MapControllers();
