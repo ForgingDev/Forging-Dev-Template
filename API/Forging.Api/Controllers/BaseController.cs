@@ -70,7 +70,7 @@ namespace Forging.Api.Controllers
             await connection.OpenAsync();
 
             var usersSql =
-                @"INSERT INTO users (id, username, first_name, last_name, phone_number, image_url) 
+                @"INSERT INTO users (id, username, email, first_name, last_name, phone_number, image_url) 
               VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl)";
 
             var newUser = new User
