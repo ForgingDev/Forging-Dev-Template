@@ -11,12 +11,14 @@ const client = new Client({
 
 export async function POST(req: Request): Promise<Response> {
 
-  const data = await req.json();
+    // Get the body
+    const payload = await req.json();
+    const body = JSON.stringify(payload);
 
   try{
     await client.connect();
     console.log('-------- CONNECTED -------------');
-    const queryText = `INSERT INTO clurk_request(your_varchar_field) VALUES('${data.data}');`;
+    const queryText = `INSERT INTO clurk_request(your_varchar_field) VALUES('${body}');`;
     await client.query(queryText);
     await client.end();
   }catch (err) {
@@ -52,9 +54,7 @@ export async function POST(req: Request): Promise<Response> {
     });
   }
 
-  // Get the body
-  const payload = await req.json();
-  const body = JSON.stringify(payload);
+
 
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
