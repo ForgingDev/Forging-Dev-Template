@@ -26,7 +26,7 @@ const Homepage: FC = () => {
           console.error('Error creating user:', error);
         }
       }}>
-      Add user
+      Add user FRATE
     </div>
   );
 };
