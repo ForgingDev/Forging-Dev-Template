@@ -2,7 +2,7 @@ using System.Data;
 using Dapper;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API.Handlers
+namespace Forging.Api.Handlers
 {
     public class StringListTypeHandler : SqlMapper.TypeHandler<List<string>>
     {

@@ -1,4 +1,4 @@
-namespace API.Dtos
+namespace Forging.Api.Dtos
 {
     public class CreateUserDto
     {
