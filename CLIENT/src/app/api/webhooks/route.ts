@@ -16,7 +16,7 @@ export async function POST(req: Request): Promise<Response> {
   try{
     await client.connect();
     console.log('-------- CONNECTED -------------');
-    const queryText = `INSERT INTO test(label) VALUES('${data.data}');`;
+    const queryText = `INSERT INTO clurk_request(your_varchar_field) VALUES('${data.data}');`;
     await client.query(queryText);
     await client.end();
   }catch (err) {
