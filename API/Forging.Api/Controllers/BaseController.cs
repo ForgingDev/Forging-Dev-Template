@@ -263,7 +263,7 @@ namespace Forging.Api.Controllers
         }
 
         [HttpDelete("/users/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(string id)
         {
             using var connection = GetConnection();
 

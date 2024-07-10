@@ -1,15 +1,14 @@
 'use client';
 
-import { createUser } from '@/actions/database.actions';
-import { CreateUserModel } from '@/data/models/user.models';
+import { updateUser } from '@/actions/database.actions';
+import { UpdateUserModel } from '@/data/models/user.models';
 import { FC } from 'react';
 
 const Homepage: FC = () => {
   return (
     <div
       onClick={async () => {
-        const user: CreateUserModel = {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        const user: UpdateUserModel = {
           email: ['pateu@gmail.com'],
           phoneNumber: ['+40727892022'],
           firstName: 'Pateu',
@@ -19,7 +18,10 @@ const Homepage: FC = () => {
         };
 
         try {
-          const res = await createUser(user);
+          const res = await updateUser(
+            user,
+            'user_2j4imuoQX2NErkIGiuHIsgyyf8o'
+          );
 
           console.log(res);
         } catch (error) {
