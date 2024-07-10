@@ -8,10 +8,10 @@ namespace Forging.Api.Models
     public class User
     {
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [Description("username")]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Description("email")]
         public List<string> Email { get; set; }
@@ -27,9 +27,6 @@ namespace Forging.Api.Models
 
         [Description("image_url")]
         public string ImageUrl { get; set; }
-
-        [Description("description")]
-        public string Description { get; set; }
 
         [Description("joined_at")]
         public DateTime JoinedAt { get; set; }

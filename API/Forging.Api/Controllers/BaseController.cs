@@ -70,14 +70,13 @@ namespace Forging.Api.Controllers
             await connection.OpenAsync();
 
             var usersSql =
-                @"INSERT INTO users (id, username, description, email, first_name, last_name, phone_number, image_url) 
-              VALUES (@Id, @Username, @Description, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl)";
+                @"INSERT INTO users (id, username first_name, last_name, phone_number, image_url) 
+              VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl)";
 
             var newUser = new User
             {
                 Id = createUserDto.Id,
                 Username = createUserDto.Username,
-                Description = createUserDto.Description,
                 Email = createUserDto.Email,
                 PhoneNumber = createUserDto.PhoneNumber,
                 FirstName = createUserDto.FirstName,
@@ -167,7 +166,7 @@ namespace Forging.Api.Controllers
                 {
                     var usersSql =
                         @"UPDATE users 
-                      SET username = @Username, description = @Description, email = @Email, first_name = @FirstName, 
+                      SET username = @Username, email = @Email, first_name = @FirstName, 
                       last_name = @LastName, phone_number = @PhoneNumber, image_url = @ImageUrl 
                       WHERE id = @Id";
 
@@ -177,7 +176,6 @@ namespace Forging.Api.Controllers
                         {
                             Id = id,
                             updateUserDto.Username,
-                            updateUserDto.Description,
                             updateUserDto.Email,
                             updateUserDto.FirstName,
                             updateUserDto.LastName,
