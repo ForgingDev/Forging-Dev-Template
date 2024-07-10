@@ -9,12 +9,12 @@ const Homepage: FC = () => {
     <div
       onClick={async () => {
         const user: UpdateUserModel = {
-          email: ['pateu@gmail.com'],
-          phoneNumber: ['+40727892022'],
-          firstName: 'Pateu',
-          imageUrl: 'string',
-          lastName: 'Pateutz',
-          username: 'Pateutz24',
+          email: ['pizdamatii@gmail.com'],
+          phoneNumber: ['+40727892123'],
+          firstName: 'Pizda',
+          imageUrl: 'ceimagevreicoaie',
+          lastName: 'Matii',
+          username: 'PulaCalulului',
         };
 
         try {
