@@ -22,7 +22,7 @@ builder.Services.AddCors(opt =>
             policy
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithOrigins("https://forging-dev-auth.vercel.app/");
+                .WithOrigins("*");
         }
     );
 });
