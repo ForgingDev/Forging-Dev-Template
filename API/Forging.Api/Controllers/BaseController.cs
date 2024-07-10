@@ -58,7 +58,7 @@ namespace API.Controllers
 
             var newUser = new User
             {
-                Id = Guid.NewGuid(),
+                Id = createUserDto.Id,
                 Username = createUserDto.Username,
                 Description = createUserDto.Description,
                 Email = createUserDto.Email,

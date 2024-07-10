@@ -1,4 +1,5 @@
-import { updateDB } from '@/actions/database.actions';
+import { createUser, updateUser } from '@/actions/database.actions';
+import { CreateUserModel, UpdateUserModel } from '@/data/models/user.models';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
@@ -52,11 +53,46 @@ export async function POST(req: Request): Promise<Response> {
   const eventType = evt.type;
 
   if (eventType === 'user.created') {
-    await updateDB(`User Created with name ${evt.data.first_name}`);
+    const user: CreateUserModel = {
+      id: evt.data.id,
+      username: evt.data.username,
+      email: evt.data.email_addresses.map(email => email.email_address),
+      phoneNumber: evt.data.phone_numbers.map(phone => phone.phone_number),
+      firstName: evt.data.first_name,
+      lastName: evt.data.last_name,
+      imageUrl: evt.data.image_url,
+    };
+
+    try {
+      await createUser(user);
+    } catch (error) {
+      console.error('Error creating user:', error);
+
+      return new Response('Error occured', {
+        status: 400,
+      });
+    }
   } else if (eventType === 'user.updated') {
-    await updateDB(`User Updated with name ${evt.data.first_name}`);
+    const user: UpdateUserModel = {
+      username: evt.data.username,
+      email: evt.data.email_addresses.map(email => email.email_address),
+      phoneNumber: evt.data.phone_numbers.map(phone => phone.phone_number),
+      firstName: evt.data.first_name,
+      lastName: evt.data.last_name,
+      imageUrl: evt.data.image_url,
+    };
+
+    try {
+      await updateUser(user, evt.data.id);
+    } catch (error) {
+      console.error('Error updating user:', error);
+
+      return new Response('Error occured', {
+        status: 400,
+      });
+    }
   } else if (eventType === 'user.deleted') {
-    await updateDB(`User Deleted with name ${evt.data.id}`);
+    console.log('da');
   }
 
   return new Response('', { status: 200 });
