@@ -8,7 +8,7 @@ export async function createUser(user: CreateUserModel): Promise<void> {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ createUserDto: user }),
+    body: JSON.stringify({ ...user, description: 'Delete later please' }),
   });
 }
 
