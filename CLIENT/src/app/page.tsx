@@ -9,11 +9,11 @@ const Homepage: FC = () => {
     <div
       onClick={async () => {
         const user: CreateUserModel = {
-          id: '123',
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           email: ['pateu@gmail.com'],
           phoneNumber: ['+40727892022'],
           firstName: 'Pateu',
-          imageUrl: '',
+          imageUrl: 'string',
           lastName: 'Pateutz',
           username: 'Pateutz24',
         };
