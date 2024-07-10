@@ -155,7 +155,7 @@ namespace Forging.Api.Controllers
         }
 
         [HttpPut("/users/{id}")]
-        public async Task<ActionResult<User>> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+        public async Task<ActionResult<User>> UpdateUser(string id, UpdateUserDto updateUserDto)
         {
             using var connection = GetConnection();
 
