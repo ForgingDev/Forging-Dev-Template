@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Reflection;
-using API.Handlers;
-using API.Models;
+using Forging.Api.Handlers;
+using Forging.Api.Models;
 using Dapper;
 using Npgsql;
 
@@ -13,7 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-var connectionString = @$"Host={builder.Configuration["DATABASE_HOST_SUPABASE"]};
+var connectionString =
+    @$"Host={builder.Configuration["DATABASE_HOST_SUPABASE"]};
                           Port={builder.Configuration["DATABASE_PORT_SUPABASE"]};
                           Database={builder.Configuration["DEFAULT_DATABASE_NAME"]};
                           User Id={builder.Configuration["DATABASE_USERNAME_SUPABASE"]};
@@ -44,7 +45,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 app.MapControllers();

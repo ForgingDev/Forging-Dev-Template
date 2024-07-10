@@ -1,10 +1,10 @@
-using API.Dtos;
-using API.Models;
+using Forging.Api.Dtos;
+using Forging.Api.Models;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
-namespace API.Controllers
+namespace Forging.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
