@@ -42,7 +42,7 @@ namespace Forging.Api.Controllers
         }
 
         [HttpGet("/users/{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<ActionResult<User>> GetUser(string id)
         {
             await using var connection = GetConnection();
 
