@@ -39,8 +39,8 @@ export async function deleteUser(id: string): Promise<void> {
 
 // ROLES
 
-export async function getUserRoles(): Promise<IdNameModel[]> {
-  const res = await fetch(`${endpoint}/${BASE_URL}`, {
+export async function getUserRoles(): Promise<IdNameModel<Roles>[]> {
+  const res = await fetch(`${endpoint}/${BASE_URL}/roles`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

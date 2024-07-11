@@ -1,9 +1,10 @@
 import { IdNameModel } from '@/data/models/common.models';
+import { Roles } from '@/data/models/role.models';
 
 const endpoint = 'https://forging-dev-api.fly.dev';
 const BASE_URL = 'roles';
 
-export async function getRoles(): Promise<IdNameModel[]> {
+export async function getRoles(): Promise<IdNameModel<Roles>[]> {
   const res = await fetch(`${endpoint}/${BASE_URL}`, {
     method: 'GET',
     headers: {
@@ -14,7 +15,7 @@ export async function getRoles(): Promise<IdNameModel[]> {
   return res.json();
 }
 
-export async function addRole(role: IdNameModel): Promise<void> {
+export async function addRole(role: IdNameModel<Roles>): Promise<void> {
   await fetch(`${endpoint}/${BASE_URL}`, {
     method: 'POST',
     headers: {
@@ -24,7 +25,7 @@ export async function addRole(role: IdNameModel): Promise<void> {
   });
 }
 
-export async function updateRole(name: string, id: string): Promise<void> {
+export async function updateRole(name: string, id: Roles): Promise<void> {
   await fetch(`${endpoint}/${BASE_URL}/${id}`, {
     method: 'PUT',
     headers: {
@@ -34,7 +35,7 @@ export async function updateRole(name: string, id: string): Promise<void> {
   });
 }
 
-export async function deleteRole(id: string): Promise<void> {
+export async function deleteRole(id: Roles): Promise<void> {
   await fetch(`${endpoint}/${BASE_URL}/${id}`, {
     method: 'DELETE',
     headers: {
