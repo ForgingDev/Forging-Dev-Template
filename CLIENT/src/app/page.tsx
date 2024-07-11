@@ -20,7 +20,7 @@ const Homepage: FC = () => {
         try {
           const res = await updateUser(
             user,
-            'user_2j4imuoQX2NErkIGiuHIsgyyf8o'
+            'user_2j6i9te3EXTPZdta6eInBBAVwZy'
           );
 
           console.log(res);
