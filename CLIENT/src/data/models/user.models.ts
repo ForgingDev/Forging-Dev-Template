@@ -6,6 +6,9 @@ export type CreateUserModel = {
   firstName: string | null;
   lastName: string | null;
   imageUrl: string;
+  roles: string[];
 };
 
-export type UpdateUserModel = Omit<CreateUserModel, 'id'>;
+export type UpdateUserModel = Omit<CreateUserModel, 'id' | 'roles'> & {
+  roles?: string[];
+};

@@ -61,6 +61,7 @@ export async function POST(req: Request): Promise<Response> {
       firstName: evt.data.first_name,
       lastName: evt.data.last_name,
       imageUrl: evt.data.image_url,
+      roles: [],
     };
 
     try {
