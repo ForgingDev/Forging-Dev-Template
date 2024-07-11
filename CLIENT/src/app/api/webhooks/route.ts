@@ -1,4 +1,4 @@
-import { createUser, updateUser } from '@/actions/database.actions';
+import { createUser, deleteUser, updateUser } from '@/actions/database.actions';
 import { CreateUserModel, UpdateUserModel } from '@/data/models/user.models';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';
@@ -92,7 +92,20 @@ export async function POST(req: Request): Promise<Response> {
       });
     }
   } else if (eventType === 'user.deleted') {
-    console.log('da');
+    if (!evt.data.id)
+      return new Response('User Id can not be undefined when deleting', {
+        status: 400,
+      });
+
+    try {
+      await deleteUser(evt.data.id);
+    } catch (error) {
+      console.error('Error updating user:', error);
+
+      return new Response('Error occured', {
+        status: 400,
+      });
+    }
   }
 
   return new Response('', { status: 200 });
