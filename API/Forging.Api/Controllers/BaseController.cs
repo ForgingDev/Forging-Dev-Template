@@ -70,8 +70,8 @@ namespace Forging.Api.Controllers
             await connection.OpenAsync();
 
             var usersSql =
-                @"INSERT INTO users (id, username, email, first_name, last_name, phone_number, image_url) 
-              VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl)";
+                @"INSERT INTO users (id, username, email, first_name, last_name, phone_number, image_url, user_roles) 
+              VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl, @Roles)";
 
             var newUser = new User
             {
@@ -79,6 +79,7 @@ namespace Forging.Api.Controllers
                 Username = createUserDto.Username,
                 Email = createUserDto.Email,
                 PhoneNumber = createUserDto.PhoneNumber,
+                Roles = createUserDto.Roles,
                 FirstName = createUserDto.FirstName,
                 LastName = createUserDto.LastName,
                 ImageUrl = createUserDto.ImageUrl,
@@ -89,21 +90,7 @@ namespace Forging.Api.Controllers
             {
                 try
                 {
-                    var result = await connection.ExecuteAsync(
-                        usersSql,
-                        new
-                        {
-                            newUser.Id,
-                            newUser.Username,
-                            newUser.Email,
-                            newUser.FirstName,
-                            newUser.LastName,
-                            newUser.PhoneNumber,
-                            newUser.ImageUrl,
-                            newUser.JoinedAt
-                        },
-                        transaction
-                    );
+                    var result = await connection.ExecuteAsync(usersSql, newUser, transaction);
                     if (result > 0)
                     {
                         foreach (var email in newUser.Email)
@@ -147,6 +134,28 @@ namespace Forging.Api.Controllers
                             {
                                 transaction.Rollback();
                                 return BadRequest("Failed to insert provided phone number(s)");
+                            }
+                        }
+
+                        foreach (var roles in newUser.Roles)
+                        {
+                            var rolesSql =
+                                @"INSERT INTO roles (id, user_id, roles) VALUES (@RoleId, @UserId, @Roles)";
+                            var insertRolesResult = await connection.ExecuteAsync(
+                                rolesSql,
+                                new
+                                {
+                                    RoleId = Guid.NewGuid(),
+                                    UserId = newUser.Id,
+                                    Roles = roles
+                                },
+                                transaction
+                            );
+
+                            if (insertRolesResult <= 0)
+                            {
+                                transaction.Rollback();
+                                return BadRequest("Failed to insert provided role(s)");
                             }
                         }
 
