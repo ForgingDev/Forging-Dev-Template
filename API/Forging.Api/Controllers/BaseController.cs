@@ -65,7 +65,7 @@ namespace Forging.Api.Controllers
         [HttpPost("/users")]
         public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
         {
-            using var connection = GetConnection();
+            await using var connection = GetConnection();
 
             await connection.OpenAsync();
 
@@ -171,7 +171,7 @@ namespace Forging.Api.Controllers
         [HttpPut("/users/{id}")]
         public async Task<ActionResult<User>> UpdateUser(string id, UpdateUserDto updateUserDto)
         {
-            using var connection = GetConnection();
+            await using var connection = GetConnection();
 
             await connection.OpenAsync();
             using (var transaction = connection.BeginTransaction())
@@ -279,7 +279,7 @@ namespace Forging.Api.Controllers
         [HttpDelete("/users/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            using var connection = GetConnection();
+            await using var connection = GetConnection();
 
             await connection.OpenAsync();
 
