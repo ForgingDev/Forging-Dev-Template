@@ -8,7 +8,7 @@ namespace Forging.Api.Models
     public class User
     {
         [Key]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Description("username")]
         public string? Username { get; set; }
