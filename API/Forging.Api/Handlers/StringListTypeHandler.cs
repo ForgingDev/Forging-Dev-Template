@@ -14,8 +14,8 @@ namespace Forging.Api.Handlers
         public override List<string> Parse(object value)
         {
             value ??= string.Empty;
-            var emails = (value as string)!.Replace("{", "").Replace("}", "").Replace("\"", "");
-            return emails.IsNullOrEmpty() ? new List<string>() : emails.Split(',').ToList();
+            var values = (value as string)!.Replace("{", "").Replace("}", "").Replace("\"", "");
+            return values.IsNullOrEmpty() ? new List<string>() : values.Split(',').ToList();
         }
     }
 }

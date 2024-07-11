@@ -66,12 +66,11 @@ namespace Forging.Api.Controllers
         public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
         {
             await using var connection = GetConnection();
-
             await connection.OpenAsync();
 
             var usersSql =
-                @"INSERT INTO users (id, username, email, first_name, last_name, phone_number, image_url, user_roles) 
-              VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl, @Roles)";
+                @"INSERT INTO users (id, username, email, first_name, last_name, phone_number, image_url, roles) 
+            VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl, @Roles)";
 
             var newUser = new User
             {
@@ -137,18 +136,14 @@ namespace Forging.Api.Controllers
                             }
                         }
 
-                        foreach (var roles in newUser.Roles)
+                        foreach (var role in newUser.Roles)
                         {
                             var rolesSql =
-                                @"INSERT INTO roles (id, user_id, roles) VALUES (@RoleId, @UserId, @Roles)";
+                                @"INSERT INTO user_roles (user_id, role_id) 
+                            VALUES (@UserId, (SELECT id FROM roles WHERE role_name = @RoleName))";
                             var insertRolesResult = await connection.ExecuteAsync(
                                 rolesSql,
-                                new
-                                {
-                                    RoleId = Guid.NewGuid(),
-                                    UserId = newUser.Id,
-                                    Roles = roles
-                                },
+                                new { UserId = newUser.Id, RoleName = role },
                                 transaction
                             );
 
@@ -181,17 +176,17 @@ namespace Forging.Api.Controllers
         public async Task<ActionResult<User>> UpdateUser(string id, UpdateUserDto updateUserDto)
         {
             await using var connection = GetConnection();
-
             await connection.OpenAsync();
+
             using (var transaction = connection.BeginTransaction())
             {
                 try
                 {
                     var usersSql =
                         @"UPDATE users 
-                      SET username = @Username, email = @Email, first_name = @FirstName, 
-                      last_name = @LastName, phone_number = @PhoneNumber, image_url = @ImageUrl 
-                      WHERE id = @Id";
+                    SET username = @Username, email = @Email, first_name = @FirstName, 
+                    last_name = @LastName, phone_number = @PhoneNumber, image_url = @ImageUrl, roles = @Roles
+                    WHERE id = @Id";
 
                     var result = await connection.ExecuteAsync(
                         usersSql,
@@ -204,14 +199,17 @@ namespace Forging.Api.Controllers
                             updateUserDto.LastName,
                             updateUserDto.PhoneNumber,
                             updateUserDto.ImageUrl,
+                            updateUserDto.Roles
                         },
                         transaction
                     );
+
                     if (result > 0)
                     {
                         var deleteEmailSql = @"DELETE FROM user_emails WHERE user_id = @UserId";
                         var deletePhoneNrSql =
                             @"DELETE FROM user_phone_numbers WHERE user_id = @UserId";
+                        var deleteRolesSql = @"DELETE FROM user_roles WHERE user_id = @UserId";
 
                         await connection.ExecuteAsync(
                             deleteEmailSql,
@@ -223,12 +221,17 @@ namespace Forging.Api.Controllers
                             new { UserId = id },
                             transaction
                         );
+                        await connection.ExecuteAsync(
+                            deleteRolesSql,
+                            new { UserId = id },
+                            transaction
+                        );
 
                         foreach (var email in updateUserDto.Email)
                         {
                             var insertEmailSql =
                                 @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
-                            var EmailResponse = connection.ExecuteAsync(
+                            var emailResponse = await connection.ExecuteAsync(
                                 insertEmailSql,
                                 new
                                 {
@@ -239,10 +242,10 @@ namespace Forging.Api.Controllers
                                 transaction
                             );
 
-                            if (await EmailResponse <= 0)
+                            if (emailResponse <= 0)
                             {
                                 transaction.Rollback();
-                                return BadRequest("Failed to update email adress(es)");
+                                return BadRequest("Failed to update email address(es)");
                             }
                         }
 
@@ -250,7 +253,7 @@ namespace Forging.Api.Controllers
                         {
                             var insertPhoneNrSql =
                                 @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
-                            var PhoneNumberResponse = connection.ExecuteAsync(
+                            var phoneNumberResponse = await connection.ExecuteAsync(
                                 insertPhoneNrSql,
                                 new
                                 {
@@ -261,12 +264,31 @@ namespace Forging.Api.Controllers
                                 transaction
                             );
 
-                            if (await PhoneNumberResponse <= 0)
+                            if (phoneNumberResponse <= 0)
                             {
                                 transaction.Rollback();
                                 return BadRequest("Failed to update phone number(s)");
                             }
                         }
+
+                        foreach (var role in updateUserDto.Roles)
+                        {
+                            var rolesSql =
+                                @"INSERT INTO user_roles (user_id, role_id) 
+                            VALUES (@UserId, (SELECT id FROM roles WHERE role_name = @RoleName))";
+                            var insertRolesResult = await connection.ExecuteAsync(
+                                rolesSql,
+                                new { UserId = id, RoleName = role },
+                                transaction
+                            );
+
+                            if (insertRolesResult <= 0)
+                            {
+                                transaction.Rollback();
+                                return BadRequest("Failed to update role(s)");
+                            }
+                        }
+
                         transaction.Commit();
                         await connection.CloseAsync();
                         return NoContent();

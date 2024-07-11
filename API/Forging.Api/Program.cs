@@ -32,8 +32,16 @@ var connectionString =
                         Password={builder.Configuration["DATABASE_PASSWORD_SUPABASE"]};";
 builder.Services.AddTransient<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
 
-var map = new CustomPropertyTypeMap(
+//TODO make this method abstract and extract it into extesions/helpers
+
+var userMap = new CustomPropertyTypeMap(
     typeof(User),
+    (type, columnName) =>
+        type.GetProperties().FirstOrDefault(prop => GetDescriptionFromAttribute(prop) == columnName)
+);
+
+var roleMap = new CustomPropertyTypeMap(
+    typeof(Role),
     (type, columnName) =>
         type.GetProperties().FirstOrDefault(prop => GetDescriptionFromAttribute(prop) == columnName)
 );
@@ -49,7 +57,8 @@ static string GetDescriptionFromAttribute(MemberInfo member)
     return attrib == null ? member.Name : attrib.Description;
 }
 
-SqlMapper.SetTypeMap(typeof(User), map);
+SqlMapper.SetTypeMap(typeof(User), userMap);
+SqlMapper.SetTypeMap(typeof(Role), roleMap);
 
 SqlMapper.AddTypeHandler(new StringListTypeHandler());
 var app = builder.Build();
