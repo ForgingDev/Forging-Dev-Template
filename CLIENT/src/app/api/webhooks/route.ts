@@ -3,34 +3,11 @@ import { CreateUserModel, UpdateUserModel } from '@/data/models/user.models';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
-import { Client } from 'pg';
- 
-const client = new Client({
- connectionString: process.env.DATABASE_CONNECTION_STRING,
-});
 
 export async function POST(req: Request): Promise<Response> {
-
-    // Get the body
-    const payload = await req.json();
-    const body = JSON.stringify(payload);
-
-  try{
-    await client.connect();
-    console.log('-------- CONNECTED -------------');
-    const queryText = `INSERT INTO clurk_request(your_varchar_field) VALUES('${body}');`;
-    await client.query(queryText);
-    await client.end();
-  }catch (err) {
-    console.error('Database connection error');
-    await client.end();
-    return new Response(JSON.stringify({ error: 'Failed to insert data' }), {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      status: 500,
-    });
-  }
+  // Get the body
+  const payload = await req.json();
+  const body = JSON.stringify(payload);
 
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -53,8 +30,6 @@ export async function POST(req: Request): Promise<Response> {
       status: 400,
     });
   }
-
-
 
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
