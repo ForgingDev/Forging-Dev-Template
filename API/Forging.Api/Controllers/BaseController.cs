@@ -89,7 +89,21 @@ namespace Forging.Api.Controllers
             {
                 try
                 {
-                    var result = await connection.ExecuteAsync(usersSql, newUser, transaction);
+                    var result = await connection.ExecuteAsync(
+                        usersSql,
+                        new
+                        {
+                            newUser.Id,
+                            newUser.Username,
+                            newUser.Email,
+                            newUser.FirstName,
+                            newUser.LastName,
+                            newUser.PhoneNumber,
+                            newUser.ImageUrl,
+                            newUser.JoinedAt
+                        },
+                        transaction
+                    );
                     if (result > 0)
                     {
                         foreach (var email in newUser.Email)
