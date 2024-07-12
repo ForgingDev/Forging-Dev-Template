@@ -1,5 +1,5 @@
-import { createUser, deleteUser, updateUser } from '@/actions/database.actions';
 import { CreateUserModel, UpdateUserModel } from '@/data/models/user.models';
+import { createUser, deleteUser, updateUser } from '@/services/users.service';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';

@@ -2,11 +2,15 @@ import { ToastMessage } from 'primereact/toast';
 import { create } from 'zustand';
 
 type TNotificationsState = {
-  noitification: ToastMessage | undefined;
+  noitification:
+    | Pick<ToastMessage, 'severity' | 'summary' | 'detail'>
+    | undefined;
 };
 
 type Actions = {
-  showNotification: (type: ToastMessage) => void;
+  showNotification: (
+    type: Pick<ToastMessage, 'severity' | 'summary' | 'detail'>
+  ) => void;
 };
 
 export const useNotificationsStore = create<TNotificationsState & Actions>()(

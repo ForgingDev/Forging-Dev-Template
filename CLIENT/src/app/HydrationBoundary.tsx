@@ -8,10 +8,10 @@ const HydrationBoundary: FC<PropsWithChildren> = ({ children }) => {
     defaultOptions: {
       queries: {
         staleTime: 5 * 60 * 1000, // this sets the cache time to 5 minutes
-        retry: 2,
+        retry: 1,
       },
       mutations: {
-        retry: 2,
+        retry: 1,
       },
     },
   });
