@@ -63,9 +63,9 @@ namespace Forging.Api.Controllers
             await using var connection = GetConnection();
             await connection.OpenAsync();
 
-            var newRole = new Role { Id = Guid.NewGuid(), RoleName = createRoleDto.RoleName, };
+            var newRole = new Role { Id = Guid.NewGuid(), Name = createRoleDto.Name, };
 
-            var roleInsertSql = @"INSERT INTO roles (id, role_name) VALUES (@Id, @RoleName)";
+            var roleInsertSql = @"INSERT INTO roles (id, role_name) VALUES (@Id, @Name)";
             var result = await connection.ExecuteAsync(roleInsertSql, newRole);
 
             await connection.CloseAsync();
@@ -78,10 +78,10 @@ namespace Forging.Api.Controllers
             await using var connection = GetConnection();
             await connection.OpenAsync();
 
-            var updateRoleSql = @"UPDATE roles SET role_name = @RoleName WHERE id = @Id";
+            var updateRoleSql = @"UPDATE roles SET role_name = @Name WHERE id = @Id";
             var result = await connection.ExecuteAsync(
                 updateRoleSql,
-                new { Id = id, updateRoleDto.RoleName, }
+                new { Id = id, updateRoleDto.Name, }
             );
 
             await connection.CloseAsync();

@@ -11,6 +11,6 @@ namespace Forging.Api.Models
         public Guid Id { get; set; }
 
         [Description("role_name")]
-        public string RoleName { get; set; }
+        public string Name { get; set; }
     }
 }
