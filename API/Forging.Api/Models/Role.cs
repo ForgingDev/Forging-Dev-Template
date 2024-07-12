@@ -1,6 +1,5 @@
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Dapper.Contrib.Extensions;
 
 namespace Forging.Api.Models
 {
@@ -8,6 +7,7 @@ namespace Forging.Api.Models
     public class Role
     {
         [Key]
+        [Description("id")]
         public Guid Id { get; set; }
 
         [Description("role_name")]

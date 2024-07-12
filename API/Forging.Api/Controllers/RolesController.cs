@@ -1,4 +1,5 @@
 using Dapper;
+using Dapper.Contrib.Extensions;
 using Forging.Api.Dtos;
 using Forging.Api.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -46,17 +47,14 @@ namespace Forging.Api.Controllers
             await using var connection = GetConnection();
             await connection.OpenAsync();
 
-            var role = await connection.QueryFirstOrDefaultAsync<Role>(
-                "SELECT * FROM roles WHERE id = @Id",
-                new { Id = id }
-            );
+            var role = connection.Get<Role>(id);
 
             await connection.CloseAsync();
             if (role == null)
             {
                 return NotFound();
             }
-            return role;
+            return Ok(role);
         }
 
         [HttpPost("/roles")]
@@ -67,7 +65,7 @@ namespace Forging.Api.Controllers
 
             var newRole = new Role { Id = Guid.NewGuid(), RoleName = createRoleDto.RoleName, };
 
-            var roleInsertSql = @"INSERT INTO roles (role_name) VALUES (@RoleName)";
+            var roleInsertSql = @"INSERT INTO roles (id, role_name) VALUES (@Id, @RoleName)";
             var result = await connection.ExecuteAsync(roleInsertSql, newRole);
 
             await connection.CloseAsync();
