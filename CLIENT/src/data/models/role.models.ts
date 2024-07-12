@@ -1,4 +1,4 @@
 export enum Roles {
   Admin = 'Admin',
-  User = '00000000-0000-0000-0000-000000000000',
+  User = '6da6abef-c12f-4f3a-95ce-8de006effcac',
 }
