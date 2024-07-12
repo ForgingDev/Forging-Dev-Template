@@ -3,7 +3,7 @@ import { Roles } from '@/data/models/role.models';
 import { getRoleRequest } from '@/services/roles.service';
 
 export const getRole = async (
-  id: string
+  id: Roles
 ): Promise<GETResponseDataModel<IdNameModel<Roles>>> => {
   const result: GETResponseDataModel<IdNameModel<Roles>> = {
     data: undefined,

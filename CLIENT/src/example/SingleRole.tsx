@@ -1,10 +1,9 @@
 import { getRole } from '@/actions/roles/getRole.action';
+import { Roles } from '@/data/models/role.models';
 import { FC } from 'react';
 
 const SingleRole: FC = async () => {
-  const { data: role, error } = await getRole(
-    '00000000-0000-0000-0000-000000000000'
-  );
+  const { data: role, error } = await getRole(Roles.User);
 
   if (error) {
     return <div>{error}</div>;
