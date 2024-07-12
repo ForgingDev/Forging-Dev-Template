@@ -11,9 +11,7 @@ const EditRole: FC = () => {
     <button
       onClick={() => handleUpdateRole('Apdeitid', Roles.User)}
       disabled={updatingRole}>
-      {updatingRole
-        ? 'Updating role...'
-        : 'Update role with ID: "00000000-0000-0000-0000-000000000000"'}
+      {updatingRole ? 'Updating role...' : 'Update role with ID: ' + Roles.User}
     </button>
   );
 };
