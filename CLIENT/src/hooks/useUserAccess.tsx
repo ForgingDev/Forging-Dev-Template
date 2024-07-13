@@ -8,7 +8,7 @@ type ReturnProps = {
   hasAccess: boolean;
 };
 
-const useUserRoles = (requiredRoles: Roles[]): ReturnProps => {
+const useUserAccess = (requiredRoles: Roles[]): ReturnProps => {
   const [userRoles, setUserRoles] = useState<IdNameModel<Roles>[]>([]);
   const { userId } = useAuth();
 
@@ -33,4 +33,4 @@ const useUserRoles = (requiredRoles: Roles[]): ReturnProps => {
   return { hasAccess };
 };
 
-export default useUserRoles;
+export default useUserAccess;

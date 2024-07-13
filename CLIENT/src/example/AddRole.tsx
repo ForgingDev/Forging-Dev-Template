@@ -2,12 +2,12 @@
 
 import useAddRoleAction from '@/actions/roles/addRole/useAddRole.action';
 import { Roles } from '@/data/models/roles.models';
-import useUserRoles from '@/hooks/useUserRoles';
+import useUserAccess from '@/hooks/useUserAccess';
 import { FC } from 'react';
 
 const AddRole: FC = () => {
   const { addingRole, handleAddRole } = useAddRoleAction();
-  const { hasAccess } = useUserRoles([Roles.Admin]);
+  const { hasAccess } = useUserAccess([Roles.Admin]);
 
   if (!hasAccess) {
     return <div>Unauthorized</div>;
