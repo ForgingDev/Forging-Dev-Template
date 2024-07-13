@@ -57,6 +57,24 @@ namespace Forging.Api.Controllers
             return Ok(role);
         }
 
+        [HttpGet("/roles/user={id}")]
+        public async Task<ActionResult<IEnumerable<Role>>> GetUserRoles(string id)
+        {
+            await using var connection = GetConnection();
+            await connection.OpenAsync();
+
+            var userRolesSql =
+                @"SELECT r.id AS Id, r.name AS Name
+            FROM user_roles ur
+            JOIN roles r ON ur.role_id = r.id
+            WHERE ur.user_id = @UserId";
+
+            var roles = await connection.QueryAsync<Role>(userRolesSql, new { UserId = id });
+
+            await connection.CloseAsync();
+            return Ok(roles);
+        }
+
         [HttpPost("/roles")]
         public async Task<ActionResult<Role>> CreateRole([FromBody] RoleDto createRoleDto)
         {

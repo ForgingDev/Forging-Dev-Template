@@ -139,11 +139,11 @@ namespace Forging.Api.Controllers
                         foreach (var role in newUser.Roles)
                         {
                             var rolesSql =
-                                @"INSERT INTO user_roles (user_id, role_id) 
-                            VALUES (@UserId, (SELECT id FROM roles WHERE role_name = @RoleName))";
+                                @"INSERT INTO user_roles (user_id, role_id, role) 
+                            VALUES (@UserId, (SELECT id FROM roles WHERE name = @Name), @Name)";
                             var insertRolesResult = await connection.ExecuteAsync(
                                 rolesSql,
-                                new { UserId = newUser.Id, RoleName = role },
+                                new { UserId = newUser.Id, Name = role },
                                 transaction
                             );
 
@@ -274,11 +274,11 @@ namespace Forging.Api.Controllers
                         foreach (var role in updateUserDto.Roles)
                         {
                             var rolesSql =
-                                @"INSERT INTO user_roles (user_id, role_id) 
-                            VALUES (@UserId, (SELECT id FROM roles WHERE role_name = @RoleName))";
+                                @"INSERT INTO user_roles (user_id, role_id, role) 
+                            VALUES (@UserId, (SELECT id FROM roles WHERE name = @Name), @Name)";
                             var insertRolesResult = await connection.ExecuteAsync(
                                 rolesSql,
-                                new { UserId = id, RoleName = role },
+                                new { UserId = id, Name = role },
                                 transaction
                             );
 

@@ -10,7 +10,7 @@ namespace Forging.Api.Models
         [Description("id")]
         public Guid Id { get; set; }
 
-        [Description("role_name")]
+        [Description("name")]
         public string Name { get; set; }
     }
 }
