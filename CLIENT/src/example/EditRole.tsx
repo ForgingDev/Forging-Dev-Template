@@ -9,7 +9,7 @@ const EditRole: FC = () => {
 
   return (
     <button
-      onClick={() => handleUpdateRole('Apdeitid', Roles.User)}
+      onClick={() => handleUpdateRole(Math.random().toString(), Roles.User)}
       disabled={updatingRole}>
       {updatingRole ? 'Updating role...' : 'Update role with ID: ' + Roles.User}
     </button>

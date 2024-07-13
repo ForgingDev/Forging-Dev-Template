@@ -1,5 +1,6 @@
 import { FC, Suspense } from 'react';
 import AddRole from './AddRole';
+import DeleteRole from './DeleteRole';
 import EditRole from './EditRole';
 import RolesList from './RolesList';
 import SingleRole from './SingleRole';
@@ -25,6 +26,9 @@ const RolesExample: FC = () => {
       <br />
       <br />
       <EditRole />
+      <br />
+      <br />
+      <DeleteRole />
     </div>
   );
 };

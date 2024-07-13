@@ -2,29 +2,25 @@
 
 import { POSTResponseDataModel } from '@/data/models/common.models';
 import { Roles } from '@/data/models/role.models';
-import { updateRoleRequest } from '@/services/roles.service';
+import { deleteRoleRequest } from '@/services/roles.service';
 import { revalidateTag } from 'next/cache';
 
-export const updateRole = async (
-  name: string,
-  id: Roles
-): Promise<POSTResponseDataModel> => {
+export const deleteRole = async (id: Roles): Promise<POSTResponseDataModel> => {
   const result: POSTResponseDataModel = {
     success: undefined,
     error: undefined,
   };
 
   try {
-    await updateRoleRequest(id, name);
+    await deleteRoleRequest(id);
 
-    result.success = 'Role updated';
+    result.success = 'Role deleted successfully';
 
-    revalidateTag('get-role');
     revalidateTag('get-all-roles');
   } catch (error) {
-    result.error = 'Failed to update role';
+    result.error = 'Failed to delete role';
 
-    console.error(result.error, error);
+    console.error(error);
   }
 
   return result;

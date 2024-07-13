@@ -17,7 +17,7 @@ export async function getAllRolesRequest(): Promise<Response> {
   return response;
 }
 
-export async function getRoleRequest(id: string): Promise<Response> {
+export async function getRoleRequest(id: Roles): Promise<Response> {
   const response = await fetch(`${endpoint}/${BASE_URL}/${id}`, {
     method: 'GET',
     headers: {
@@ -31,22 +31,22 @@ export async function getRoleRequest(id: string): Promise<Response> {
   return response;
 }
 
-export async function addRoleRequest(roleName: Roles): Promise<void> {
+export async function addRoleRequest(name: string): Promise<Response> {
   const response = await fetch(`${endpoint}/${BASE_URL}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ roleName }),
+    body: JSON.stringify({ name }),
   });
 
-  return response.json();
+  return response;
 }
 
 export async function updateRoleRequest(
-  name: string,
-  id: Roles
-): Promise<void> {
+  id: Roles,
+  name: string
+): Promise<Response> {
   const response = await fetch(`${endpoint}/${BASE_URL}/${id}`, {
     method: 'PUT',
     headers: {
@@ -55,10 +55,10 @@ export async function updateRoleRequest(
     body: JSON.stringify({ name }),
   });
 
-  return response.json();
+  return response;
 }
 
-export async function deleteRoleRequest(id: Roles): Promise<void> {
+export async function deleteRoleRequest(id: Roles): Promise<Response> {
   const response = await fetch(`${endpoint}/${BASE_URL}/${id}`, {
     method: 'DELETE',
     headers: {
@@ -66,5 +66,7 @@ export async function deleteRoleRequest(id: Roles): Promise<void> {
     },
   });
 
-  return response.json();
+  throw new Error('Failed to delete role');
+
+  return response;
 }
