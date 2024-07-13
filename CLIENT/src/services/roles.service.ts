@@ -66,7 +66,5 @@ export async function deleteRoleRequest(id: Roles): Promise<Response> {
     },
   });
 
-  throw new Error('Failed to delete role');
-
   return response;
 }
