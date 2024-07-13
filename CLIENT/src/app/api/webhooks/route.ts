@@ -1,4 +1,4 @@
-import { CreateUserModel, UpdateUserModel } from '@/data/models/user.models';
+import { CreateUserModel, UpdateUserModel } from '@/data/models/users.models';
 import { createUser, deleteUser, updateUser } from '@/services/users.service';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { headers } from 'next/headers';

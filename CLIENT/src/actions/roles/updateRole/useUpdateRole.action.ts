@@ -1,4 +1,4 @@
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 import { useNotificationsStore } from '@/data/stores/useNotificationsStore';
 import { useState } from 'react';
 import { updateRole } from './updateRole.action';

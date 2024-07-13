@@ -1,7 +1,7 @@
 'use server';
 
 import { POSTResponseDataModel } from '@/data/models/common.models';
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 import { updateRoleRequest } from '@/services/roles.service';
 import { revalidateTag } from 'next/cache';
 

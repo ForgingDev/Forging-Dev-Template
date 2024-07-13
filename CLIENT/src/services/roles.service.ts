@@ -1,4 +1,4 @@
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 
 const endpoint = 'http://localhost:5296';
 const BASE_URL = 'roles';

@@ -1,7 +1,7 @@
 'use client';
 
 import useUpdateRoleAction from '@/actions/roles/updateRole/useUpdateRole.action';
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 import { FC } from 'react';
 
 const EditRole: FC = () => {

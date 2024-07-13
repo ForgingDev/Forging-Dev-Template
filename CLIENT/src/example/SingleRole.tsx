@@ -1,5 +1,5 @@
 import { getRole } from '@/actions/roles/getRole.action';
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 import { FC } from 'react';
 
 const SingleRole: FC = async () => {

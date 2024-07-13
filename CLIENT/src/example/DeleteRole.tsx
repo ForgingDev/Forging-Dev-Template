@@ -1,7 +1,7 @@
 'use client';
 
 import useDeleteRoleAction from '@/actions/roles/deleteRole/useDeleteRole.action';
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 import { FC } from 'react';
 
 const DeleteRole: FC = () => {

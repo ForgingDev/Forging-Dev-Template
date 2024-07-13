@@ -1,6 +1,6 @@
 import { IdNameModel } from '@/data/models/common.models';
-import { Roles } from '@/data/models/role.models';
-import { CreateUserModel, UpdateUserModel } from '@/data/models/user.models';
+import { Roles } from '@/data/models/roles.models';
+import { CreateUserModel, UpdateUserModel } from '@/data/models/users.models';
 
 const endpoint = 'https://forging-dev-api.fly.dev';
 const BASE_URL = 'users';

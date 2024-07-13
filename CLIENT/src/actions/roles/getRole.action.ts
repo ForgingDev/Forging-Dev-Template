@@ -1,5 +1,5 @@
 import { GETResponseDataModel, IdNameModel } from '@/data/models/common.models';
-import { Roles } from '@/data/models/role.models';
+import { Roles } from '@/data/models/roles.models';
 import { getRoleRequest } from '@/services/roles.service';
 
 export const getRole = async (
