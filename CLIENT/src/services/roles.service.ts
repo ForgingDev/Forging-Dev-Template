@@ -68,3 +68,14 @@ export async function deleteRoleRequest(id: Roles): Promise<Response> {
 
   return response;
 }
+
+export async function getUserRolesRequest(id: string): Promise<Response> {
+  const response = await fetch(`${endpoint}/${BASE_URL}/roles/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response;
+}

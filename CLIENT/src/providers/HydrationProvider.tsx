@@ -3,7 +3,7 @@
 import { FC, PropsWithChildren } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-const HydrationBoundary: FC<PropsWithChildren> = ({ children }) => {
+const HydrationProvider: FC<PropsWithChildren> = ({ children }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -21,4 +21,4 @@ const HydrationBoundary: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export default HydrationBoundary;
+export default HydrationProvider;

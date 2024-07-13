@@ -1,3 +1,5 @@
+'use server';
+
 import { GETResponseDataModel, IdNameModel } from '@/data/models/common.models';
 import { Roles } from '@/data/models/roles.models';
 import { getAllRolesRequest } from '@/services/roles.service';

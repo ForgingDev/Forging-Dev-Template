@@ -1,8 +1,15 @@
 import { getAllRoles } from '@/actions/roles/getAllRoles.action';
+import { getUserAccess } from '@/actions/users/getUserRoles/getUserAccess.action';
+import { Roles } from '@/data/models/roles.models';
 import { FC } from 'react';
 
 const RolesList: FC = async () => {
   const { data: roles, error } = await getAllRoles();
+  const { hasAccess } = await getUserAccess([Roles.Admin]);
+
+  if (!hasAccess) {
+    return <div>Unauthorized</div>;
+  }
 
   if (error) {
     return <div>{error}</div>;
