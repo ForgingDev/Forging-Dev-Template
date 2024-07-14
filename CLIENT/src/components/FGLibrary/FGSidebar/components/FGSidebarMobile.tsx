@@ -1,113 +1,15 @@
+import { SIDEBAR_ITEMS } from '@/data/constants';
 import {
   SidebarContentType,
   SidebarItemType,
 } from '@/data/types/sidebar.types';
-import { ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { useClerk, useUser } from '@clerk/nextjs';
-import {
-  BarChart4,
-  ChevronsRight,
-  CircleHelp,
-  ClipboardList,
-  House,
-  LogIn,
-  LogOut,
-  Settings,
-  TriangleAlert,
-  Users,
-} from 'lucide-react';
+import { ChevronsRight, LogIn, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import FGSidebarItem from './FGSidebarItem';
-
-const SIDEBAR_ITEMS: SidebarContentType[] = [
-  {
-    title: 'Menu',
-    items: [
-      {
-        icon: House,
-        label: 'Home',
-        url: ROUTES.HOME_ROUTE,
-        isSelected: false,
-        subItems: [],
-      },
-      {
-        label: 'Activity',
-        icon: BarChart4,
-        isSelected: false,
-        subItems: [
-          {
-            label: 'Overview',
-            url: ROUTES.OVERVIEW_ROUTE,
-          },
-          {
-            label: 'Analytics',
-            url: ROUTES.ANALYTICS_ROUTE,
-          },
-          {
-            label: 'Projects',
-            url: ROUTES.PROJECTS_ROUTE,
-          },
-        ],
-      },
-      {
-        label: 'Tasks',
-        icon: ClipboardList,
-        isSelected: false,
-        subItems: [
-          {
-            label: 'Overview',
-            url: ROUTES.OVERVIEW_ROUTE,
-          },
-          {
-            label: 'Analytics',
-            url: ROUTES.ANALYTICS_ROUTE,
-          },
-          {
-            label: 'Projects',
-            url: ROUTES.PROJECTS_ROUTE,
-          },
-        ],
-        // url: ROUTES.TASKS_ROUTE,
-      },
-      {
-        label: 'Reporting',
-        icon: TriangleAlert,
-        isSelected: false,
-        subItems: [],
-        url: ROUTES.REPORTING_ROUTE,
-      },
-      {
-        label: 'Users',
-        isSelected: false,
-        icon: Users,
-        subItems: [],
-        url: ROUTES.USERS_ROUTE,
-      },
-    ],
-  },
-  {
-    title: 'Other',
-    items: [
-      {
-        icon: CircleHelp,
-        label: 'Help',
-        subItems: [],
-        isSelected: false,
-        url: ROUTES.HELP_ROUTE,
-      },
-      {
-        icon: Settings,
-        label: 'Settings',
-        subItems: [],
-        isSelected: false,
-        url: ROUTES.SETTINGS_ROUTE,
-      },
-    ],
-  },
-];
 
 type Props = {
   openedSideNavbar: boolean;
