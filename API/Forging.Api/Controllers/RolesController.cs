@@ -203,8 +203,8 @@ namespace Forging.Api.Controllers
 
                 var removeRoleInUsersSql =
                     @"UPDATE users
-                SET roles = REPLACE(roles, CONCAT(',', @Name, ','), ',')
-                WHERE id = @UserId AND roles LIKE CONCAT('%,', @Name, ',%')";
+                SET roles = REPLACE(roles, @Name, ',')
+                WHERE id = @UserId";
                 var affectedRows = await connection.ExecuteAsync(
                     removeRoleInUsersSql,
                     new { removeRoleDto.Name, UserId = id },
