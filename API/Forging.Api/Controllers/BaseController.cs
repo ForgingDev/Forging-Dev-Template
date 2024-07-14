@@ -78,97 +78,77 @@ namespace Forging.Api.Controllers
                 Username = createUserDto.Username,
                 Email = createUserDto.Email,
                 PhoneNumber = createUserDto.PhoneNumber,
-                Roles = createUserDto.Roles,
+                Roles = new List<string>(),
                 FirstName = createUserDto.FirstName,
                 LastName = createUserDto.LastName,
                 ImageUrl = createUserDto.ImageUrl,
                 JoinedAt = DateTime.UtcNow
             };
 
-            using (var transaction = connection.BeginTransaction())
+            using var transaction = connection.BeginTransaction();
+            try
             {
-                try
+                var result = await connection.ExecuteAsync(usersSql, newUser, transaction);
+                if (result > 0)
                 {
-                    var result = await connection.ExecuteAsync(usersSql, newUser, transaction);
-                    if (result > 0)
+                    foreach (var email in newUser.Email)
                     {
-                        foreach (var email in newUser.Email)
-                        {
-                            var emailSql =
-                                @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
-                            var insertEmailResult = await connection.ExecuteAsync(
-                                emailSql,
-                                new
-                                {
-                                    EmailId = Guid.NewGuid(),
-                                    UserId = newUser.Id,
-                                    Email = email
-                                },
-                                transaction
-                            );
-
-                            if (insertEmailResult <= 0)
+                        var emailSql =
+                            @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
+                        var insertEmailResult = await connection.ExecuteAsync(
+                            emailSql,
+                            new
                             {
-                                transaction.Rollback();
-                                return BadRequest("Failed to insert provided email address(es)");
-                            }
-                        }
+                                EmailId = Guid.NewGuid(),
+                                UserId = newUser.Id,
+                                Email = email
+                            },
+                            transaction
+                        );
 
-                        foreach (var phoneNumber in newUser.PhoneNumber)
+                        if (insertEmailResult <= 0)
                         {
-                            var phoneNrSql =
-                                @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
-                            var phoneNumberResult = await connection.ExecuteAsync(
-                                phoneNrSql,
-                                new
-                                {
-                                    PhoneId = Guid.NewGuid(),
-                                    UserId = newUser.Id,
-                                    PhoneNumber = phoneNumber
-                                },
-                                transaction
-                            );
-
-                            if (phoneNumberResult <= 0)
-                            {
-                                transaction.Rollback();
-                                return BadRequest("Failed to insert provided phone number(s)");
-                            }
+                            transaction.Rollback();
+                            return BadRequest("Failed to insert provided email address(es)");
                         }
-
-                        foreach (var role in newUser.Roles)
-                        {
-                            var rolesSql =
-                                @"INSERT INTO user_roles (user_id, role_id, role) 
-                            VALUES (@UserId, (SELECT id FROM roles WHERE name = @Name), @Name)";
-                            var insertRolesResult = await connection.ExecuteAsync(
-                                rolesSql,
-                                new { UserId = newUser.Id, Name = role },
-                                transaction
-                            );
-
-                            if (insertRolesResult <= 0)
-                            {
-                                transaction.Rollback();
-                                return BadRequest("Failed to insert provided role(s)");
-                            }
-                        }
-
-                        transaction.Commit();
-                        await connection.CloseAsync();
-                        return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
                     }
-                    else
+
+                    foreach (var phoneNumber in newUser.PhoneNumber)
                     {
-                        transaction.Rollback();
-                        return BadRequest("Error at inserting user");
+                        var phoneNrSql =
+                            @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
+                        var phoneNumberResult = await connection.ExecuteAsync(
+                            phoneNrSql,
+                            new
+                            {
+                                PhoneId = Guid.NewGuid(),
+                                UserId = newUser.Id,
+                                PhoneNumber = phoneNumber
+                            },
+                            transaction
+                        );
+
+                        if (phoneNumberResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return BadRequest("Failed to insert provided phone number(s)");
+                        }
                     }
+
+                    transaction.Commit();
+                    await connection.CloseAsync();
+                    return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
                 }
-                catch (Exception ex)
+                else
                 {
                     transaction.Rollback();
-                    return StatusCode(500, "Internal Server Error: " + ex.Message);
+                    return BadRequest("Error at inserting user");
                 }
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
 
@@ -178,132 +158,122 @@ namespace Forging.Api.Controllers
             await using var connection = GetConnection();
             await connection.OpenAsync();
 
-            using (var transaction = connection.BeginTransaction())
+            using var transaction = connection.BeginTransaction();
+            try
             {
-                try
-                {
-                    var usersSql =
-                        @"UPDATE users 
+                var usersSql =
+                    @"UPDATE users 
                     SET username = @Username, email = @Email, first_name = @FirstName, 
                     last_name = @LastName, phone_number = @PhoneNumber, image_url = @ImageUrl, roles = @Roles
                     WHERE id = @Id";
 
-                    var result = await connection.ExecuteAsync(
-                        usersSql,
-                        new
-                        {
-                            Id = id,
-                            updateUserDto.Username,
-                            updateUserDto.Email,
-                            updateUserDto.FirstName,
-                            updateUserDto.LastName,
-                            updateUserDto.PhoneNumber,
-                            updateUserDto.ImageUrl,
-                            updateUserDto.Roles
-                        },
+                var result = await connection.ExecuteAsync(
+                    usersSql,
+                    new
+                    {
+                        Id = id,
+                        updateUserDto.Username,
+                        updateUserDto.Email,
+                        updateUserDto.FirstName,
+                        updateUserDto.LastName,
+                        updateUserDto.PhoneNumber,
+                        updateUserDto.ImageUrl,
+                        updateUserDto.Roles
+                    },
+                    transaction
+                );
+
+                if (result > 0)
+                {
+                    var deleteEmailSql = @"DELETE FROM user_emails WHERE user_id = @UserId";
+                    var deletePhoneNrSql =
+                        @"DELETE FROM user_phone_numbers WHERE user_id = @UserId";
+                    var deleteRolesSql = @"DELETE FROM user_roles WHERE user_id = @UserId";
+
+                    await connection.ExecuteAsync(deleteEmailSql, new { UserId = id }, transaction);
+                    await connection.ExecuteAsync(
+                        deletePhoneNrSql,
+                        new { UserId = id },
                         transaction
                     );
+                    await connection.ExecuteAsync(deleteRolesSql, new { UserId = id }, transaction);
 
-                    if (result > 0)
+                    foreach (var email in updateUserDto.Email)
                     {
-                        var deleteEmailSql = @"DELETE FROM user_emails WHERE user_id = @UserId";
-                        var deletePhoneNrSql =
-                            @"DELETE FROM user_phone_numbers WHERE user_id = @UserId";
-                        var deleteRolesSql = @"DELETE FROM user_roles WHERE user_id = @UserId";
-
-                        await connection.ExecuteAsync(
-                            deleteEmailSql,
-                            new { UserId = id },
-                            transaction
-                        );
-                        await connection.ExecuteAsync(
-                            deletePhoneNrSql,
-                            new { UserId = id },
-                            transaction
-                        );
-                        await connection.ExecuteAsync(
-                            deleteRolesSql,
-                            new { UserId = id },
-                            transaction
-                        );
-
-                        foreach (var email in updateUserDto.Email)
-                        {
-                            var insertEmailSql =
-                                @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
-                            var emailResponse = await connection.ExecuteAsync(
-                                insertEmailSql,
-                                new
-                                {
-                                    EmailId = Guid.NewGuid(),
-                                    UserId = id,
-                                    Email = email
-                                },
-                                transaction
-                            );
-
-                            if (emailResponse <= 0)
+                        var insertEmailSql =
+                            @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
+                        var emailResponse = await connection.ExecuteAsync(
+                            insertEmailSql,
+                            new
                             {
-                                transaction.Rollback();
-                                return BadRequest("Failed to update email address(es)");
-                            }
-                        }
+                                EmailId = Guid.NewGuid(),
+                                UserId = id,
+                                Email = email
+                            },
+                            transaction
+                        );
 
-                        foreach (var phoneNumber in updateUserDto.PhoneNumber)
+                        if (emailResponse <= 0)
                         {
-                            var insertPhoneNrSql =
-                                @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
-                            var phoneNumberResponse = await connection.ExecuteAsync(
-                                insertPhoneNrSql,
-                                new
-                                {
-                                    PhoneId = Guid.NewGuid(),
-                                    UserId = id,
-                                    PhoneNumber = phoneNumber
-                                },
-                                transaction
-                            );
+                            transaction.Rollback();
+                            return BadRequest("Failed to update email address(es)");
+                        }
+                    }
 
-                            if (phoneNumberResponse <= 0)
+                    foreach (var phoneNumber in updateUserDto.PhoneNumber)
+                    {
+                        var insertPhoneNrSql =
+                            @"INSERT INTO user_phone_numbers (id, user_id, phone_number) VALUES (@PhoneId, @UserId, @PhoneNumber)";
+                        var phoneNumberResponse = await connection.ExecuteAsync(
+                            insertPhoneNrSql,
+                            new
                             {
-                                transaction.Rollback();
-                                return BadRequest("Failed to update phone number(s)");
-                            }
-                        }
+                                PhoneId = Guid.NewGuid(),
+                                UserId = id,
+                                PhoneNumber = phoneNumber
+                            },
+                            transaction
+                        );
 
-                        foreach (var role in updateUserDto.Roles)
+                        if (phoneNumberResponse <= 0)
                         {
-                            var rolesSql =
-                                @"INSERT INTO user_roles (user_id, role_id, role) 
+                            transaction.Rollback();
+                            return BadRequest("Failed to update phone number(s)");
+                        }
+                    }
+
+                    foreach (var role in updateUserDto.Roles)
+                    {
+                        var rolesSql =
+                            @"INSERT INTO user_roles (user_id, role_id, role) 
                             VALUES (@UserId, (SELECT id FROM roles WHERE name = @Name), @Name)";
-                            var insertRolesResult = await connection.ExecuteAsync(
-                                rolesSql,
-                                new { UserId = id, Name = role },
-                                transaction
-                            );
+                        var insertRolesResult = await connection.ExecuteAsync(
+                            rolesSql,
+                            new { UserId = id, Name = role },
+                            transaction
+                        );
 
-                            if (insertRolesResult <= 0)
-                            {
-                                transaction.Rollback();
-                                return BadRequest("Failed to update role(s)");
-                            }
+                        if (insertRolesResult <= 0)
+                        {
+                            transaction.Rollback();
+                            return BadRequest("Failed to update role(s)");
                         }
+                    }
 
-                        transaction.Commit();
-                        await connection.CloseAsync();
-                        return NoContent();
-                    }
-                    else
-                    {
-                        transaction.Rollback();
-                        return NotFound();
-                    }
+                    transaction.Commit();
+                    await connection.CloseAsync();
+                    return NoContent();
                 }
-                catch (Exception ex)
+                else
                 {
                     transaction.Rollback();
-                    return StatusCode(500, "Internal server error: " + ex.Message);
+                    return NotFound();
                 }
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 
