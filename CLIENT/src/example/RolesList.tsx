@@ -1,5 +1,5 @@
 import { getAllRoles } from '@/actions/roles/getAllRoles.action';
-import { getUserAccess } from '@/actions/users/getUserRoles/getUserAccess.action';
+import { getUserAccess } from '@/actions/users/getUserAccess.action';
 import { Roles } from '@/data/models/roles.models';
 import { FC } from 'react';
 

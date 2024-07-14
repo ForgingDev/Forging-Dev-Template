@@ -9,8 +9,9 @@ type ReturnProps = {
 };
 
 const useUserAccess = (requiredRoles: Roles[]): ReturnProps => {
-  const [userRoles, setUserRoles] = useState<IdNameModel<Roles>[]>([]);
   const { userId } = useAuth();
+
+  const [userRoles, setUserRoles] = useState<IdNameModel<Roles>[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
