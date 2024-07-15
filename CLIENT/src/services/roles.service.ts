@@ -59,7 +59,7 @@ export async function updateRoleRequest(
 }
 
 export async function deleteRoleRequest(id: Roles): Promise<Response> {
-  const response = await fetch(`${endpoint}/${BASE_URL}/${id}`, {
+  const response = await fetch(`${endpoint}/${BASE_URL}/user=${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
