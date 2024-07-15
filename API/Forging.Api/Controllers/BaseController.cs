@@ -69,6 +69,7 @@ namespace Forging.Api.Controllers
             await connection.OpenAsync();
 
             var usersSql =
+
                 @"INSERT INTO users (id, username, email, first_name, last_name, phone_number, image_url, roles) 
             VALUES (@Id, @Username, @Email, @FirstName, @LastName, @PhoneNumber, @ImageUrl, @Roles)";
 
@@ -78,7 +79,9 @@ namespace Forging.Api.Controllers
                 Username = createUserDto.Username,
                 Email = createUserDto.Email,
                 PhoneNumber = createUserDto.PhoneNumber,
+
                 Roles = new List<string>(),
+
                 FirstName = createUserDto.FirstName,
                 LastName = createUserDto.LastName,
                 ImageUrl = createUserDto.ImageUrl,
@@ -91,7 +94,9 @@ namespace Forging.Api.Controllers
                 var result = await connection.ExecuteAsync(usersSql, newUser, transaction);
                 if (result > 0)
                 {
+
                     foreach (var email in newUser.Email)
+
                     {
                         var emailSql =
                             @"INSERT INTO user_emails (id, user_id, email) VALUES (@EmailId, @UserId, @Email)";
@@ -111,6 +116,8 @@ namespace Forging.Api.Controllers
                             transaction.Rollback();
                             return BadRequest("Failed to insert provided email address(es)");
                         }
+
+
                     }
 
                     foreach (var phoneNumber in newUser.PhoneNumber)

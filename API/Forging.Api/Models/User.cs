@@ -32,7 +32,9 @@ namespace Forging.Api.Models
         [Description("joined_at")]
         public DateTime JoinedAt { get; set; }
 
+
         [Description("roles")]
+
         public List<string> Roles { get; set; }
     }
 }
