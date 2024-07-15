@@ -1,3 +1,4 @@
+import { MOBILE_BREAKPOINT } from '@/data/constants';
 import { useEffect, useState } from 'react';
 
 type ReturnProps = {
@@ -9,7 +10,7 @@ const useViewport = (): ReturnProps => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktopView(window.innerWidth > 767);
+      setIsDesktopView(window.innerWidth > MOBILE_BREAKPOINT);
     };
 
     window.addEventListener('resize', handleResize);

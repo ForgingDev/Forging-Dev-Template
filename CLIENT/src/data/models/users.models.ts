@@ -1,3 +1,5 @@
+import { IdNameModel } from './common.models';
+
 export type CreateUserModel = {
   username: string | null;
   email: string[];
@@ -6,9 +8,9 @@ export type CreateUserModel = {
   firstName: string | null;
   lastName: string | null;
   imageUrl: string;
-  roles: string[];
+  roles: IdNameModel[];
 };
 
 export type UpdateUserModel = Omit<CreateUserModel, 'id' | 'roles'> & {
-  roles?: string[];
+  roles?: IdNameModel[];
 };

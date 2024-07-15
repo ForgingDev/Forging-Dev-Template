@@ -3,15 +3,15 @@
 import { FC, PropsWithChildren } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-const HydrationBoundary: FC<PropsWithChildren> = ({ children }) => {
+const HydrationProvider: FC<PropsWithChildren> = ({ children }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 5 * 60 * 1000, // this sets the cache time to 5 minutes
-        retry: 2,
+        retry: 1,
       },
       mutations: {
-        retry: 2,
+        retry: 1,
       },
     },
   });
@@ -21,4 +21,4 @@ const HydrationBoundary: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export default HydrationBoundary;
+export default HydrationProvider;

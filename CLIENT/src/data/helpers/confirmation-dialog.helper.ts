@@ -20,6 +20,6 @@ const showConfirmationDialog = ({
   });
 };
 
-export const ConfirmationDialogService = {
+export const ConfirmationDialogHelper = {
   showConfirmationDialog,
 };

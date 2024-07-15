@@ -10,6 +10,8 @@ import {
 } from 'lucide-react';
 import { SidebarContentType } from './types/sidebar.types';
 
+export const MOBILE_BREAKPOINT = 767;
+
 export const SIDEBAR_ITEMS: SidebarContentType[] = [
   {
     title: 'Menu',

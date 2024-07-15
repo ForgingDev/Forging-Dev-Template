@@ -8,8 +8,8 @@ import { Inter } from 'next/font/google';
 import 'primeicons/primeicons.css';
 import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
-import { ReactNode, Suspense } from 'react';
-import HydrationBoundary from './HydrationBoundary';
+import { ReactNode } from 'react';
+import HydrationProvider from '../providers/HydrationProvider';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -32,11 +32,9 @@ export default function RootLayout({
             <FGSidebar />
             <GlobalDialogs />
             <FGNotification />
-            <HydrationBoundary>
-              <Suspense fallback={<div>Loading...</div>}>
-                <main className='container mx-auto px-2 pt-16'>{children}</main>
-              </Suspense>
-            </HydrationBoundary>
+            <HydrationProvider>
+              <main className='container mx-auto px-2 pt-16'>{children}</main>
+            </HydrationProvider>
           </body>
         </html>
       </PrimeReactProvider>

@@ -8,6 +8,7 @@ namespace Forging.Api.Models
     public class User
     {
         [Key]
+        [Description("id")]
         public required string Id { get; set; }
 
         [Description("username")]
@@ -31,7 +32,9 @@ namespace Forging.Api.Models
         [Description("joined_at")]
         public DateTime JoinedAt { get; set; }
 
-        [Description("user_roles")]
+
+        [Description("roles")]
+
         public List<string> Roles { get; set; }
     }
 }
