@@ -3,7 +3,7 @@ import { Roles } from '@/data/models/roles.models';
 import { FC } from 'react';
 
 const SingleRole: FC = async () => {
-  const { data: role, error } = await getRole(Roles.User);
+  const { data: role, error } = await getRole(Roles.Viewer);
 
   if (error) {
     return <div>{error}</div>;

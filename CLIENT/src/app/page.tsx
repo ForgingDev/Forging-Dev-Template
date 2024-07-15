@@ -1,7 +1,8 @@
+import RolesExample from '@/example/RolesExample';
 import { FC } from 'react';
 
 const Homepage: FC = () => {
-  return <div></div>;
+  return <RolesExample />;
 };
 
 export default Homepage;

@@ -17,9 +17,9 @@ const DeleteRole: FC = () => {
 
   return (
     <button
-      onClick={() => handleDeleteRole(Roles.User)}
+      onClick={() => handleDeleteRole(Roles.Viewer)}
       disabled={deletingRole}>
-      Delete role with ID: {Roles.User}
+      Delete role with ID: {Roles.Viewer}
     </button>
   );
 };
