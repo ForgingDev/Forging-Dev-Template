@@ -1,6 +1,6 @@
 import { Roles } from '@/data/models/roles.models';
 
-const endpoint = 'http://localhost:5296';
+const endpoint = process.env.NEXT_PUBLIC_API_URL;
 const BASE_URL = 'roles';
 
 export async function getAllRolesRequest(): Promise<Response> {
@@ -70,7 +70,7 @@ export async function deleteRoleRequest(id: Roles): Promise<Response> {
 }
 
 export async function getUserRolesRequest(id: string): Promise<Response> {
-  const response = await fetch(`${endpoint}/${BASE_URL}/roles/${id}`, {
+  const response = await fetch(`${endpoint}/${BASE_URL}/user=${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
