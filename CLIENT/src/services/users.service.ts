@@ -1,6 +1,6 @@
 import { CreateUserModel, UpdateUserModel } from '@/data/models/users.models';
 
-const endpoint = 'https://forging-dev-api.fly.dev';
+const endpoint = process.env.NEXT_PUBLIC_API_URL;
 const BASE_URL = 'users';
 
 export async function createUser(user: CreateUserModel): Promise<void> {
