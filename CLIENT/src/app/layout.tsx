@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import 'primeicons/primeicons.css';
 import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
@@ -28,6 +29,19 @@ export default function RootLayout({
     <ClerkProvider>
       <PrimeReactProvider>
         <html lang='en'>
+          <head>
+            <Script
+              async
+              src='https://www.googletagmanager.com/gtag/js?id=G-Q5BDT93GBS'></Script>
+            <Script id='google-analytics'>
+              {`  
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', 'G-Q5BDT93GBS');
+              `}
+            </Script>
+          </head>
           <body className={cn(inter.className, 'bg-zinc-800 text-white')}>
             <FGSidebar />
             <GlobalDialogs />
