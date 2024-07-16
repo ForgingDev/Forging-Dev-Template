@@ -1,17 +1,22 @@
 'use server';
 
 import { POSTResponseDataModel } from '@/data/models/common.models';
+import { Roles } from '@/data/models/roles.models';
 import { addRoleRequest } from '@/services/roles.service';
 import { revalidateTag } from 'next/cache';
 
-export const addRole = async (name: string): Promise<POSTResponseDataModel> => {
+export const addRole = async (name: Roles): Promise<POSTResponseDataModel> => {
   const result: POSTResponseDataModel = {
     success: undefined,
     error: undefined,
   };
 
   try {
-    await addRoleRequest(name);
+    const response = await addRoleRequest(name);
+
+    if (!response.ok) {
+      throw new Error('Failed to add role');
+    }
 
     result.success = 'Role added';
 

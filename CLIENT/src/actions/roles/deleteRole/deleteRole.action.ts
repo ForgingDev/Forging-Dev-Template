@@ -12,7 +12,11 @@ export const deleteRole = async (id: Roles): Promise<POSTResponseDataModel> => {
   };
 
   try {
-    await deleteRoleRequest(id);
+    const response = await deleteRoleRequest(id);
+
+    if (!response.ok) {
+      throw new Error('Failed to delete role');
+    }
 
     result.success = 'Role deleted successfully';
 

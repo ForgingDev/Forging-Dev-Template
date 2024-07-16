@@ -15,7 +15,11 @@ export const updateRole = async (
   };
 
   try {
-    await updateRoleRequest(id, name);
+    const response = await updateRoleRequest(id, name);
+
+    if (!response.ok) {
+      throw new Error('Failed to update role');
+    }
 
     result.success = 'Role updated';
 

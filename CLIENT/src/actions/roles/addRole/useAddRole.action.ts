@@ -1,9 +1,10 @@
+import { Roles } from '@/data/models/roles.models';
 import { useNotificationsStore } from '@/data/stores/useNotificationsStore';
 import { useState } from 'react';
 import { addRole } from './addRole.action';
 
 type ReturnProps = {
-  handleAddRole: () => void;
+  handleAddRole: (role: Roles) => void;
   addingRole: boolean;
 };
 
@@ -12,9 +13,9 @@ const useAddRoleAction = (): ReturnProps => {
 
   const [addingRole, setAddingRole] = useState(false);
 
-  const handleAddRole = async () => {
+  const handleAddRole = async (role: Roles) => {
     setAddingRole(true);
-    const { error, success } = await addRole('Test Role New');
+    const { error, success } = await addRole(role);
 
     if (error) {
       showNotification({
@@ -22,11 +23,7 @@ const useAddRoleAction = (): ReturnProps => {
         severity: 'error',
         summary: error,
       });
-
-      return;
-    }
-
-    if (success) {
+    } else if (success) {
       showNotification({
         detail: 'Success',
         severity: 'success',

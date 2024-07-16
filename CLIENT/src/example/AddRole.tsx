@@ -15,7 +15,7 @@ const AddRole: FC = () => {
 
   return (
     <button
-      onClick={handleAddRole}
+      onClick={() => handleAddRole(Roles.Admin)}
       disabled={addingRole}>
       {addingRole ? 'Adding role...' : 'Add new role'}
     </button>
