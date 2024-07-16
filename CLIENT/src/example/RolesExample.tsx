@@ -1,3 +1,4 @@
+import { sendGTMEvent } from '@next/third-parties/google';
 import { FC, Suspense } from 'react';
 import AddRole from './AddRole';
 import DeleteRole from './DeleteRole';
@@ -8,6 +9,10 @@ import SingleRole from './SingleRole';
 const RolesExample: FC = () => {
   return (
     <div>
+      <button
+        onClick={() => sendGTMEvent({ event: 'buttonClicked', value: 'xyz' })}>
+        Test GTM Button
+      </button>
       <div>Roles List</div>
       <Suspense fallback={<div>Loading roles list...</div>}>
         <RolesList />
