@@ -1,35 +1,22 @@
+using Forging.Api.Extensions;
 using System.ComponentModel;
 using System.Reflection;
 using Forging.Api.Handlers;
-using Forging.Api.Models;
+using Forging.Domain.Models;
 using Dapper;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
-builder.Services.AddCors(opt =>
-{
-    opt.AddPolicy(
-        "CorsPolicy",
-        policy =>
-        {
-            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("*");
-        }
-    );
-});
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var connectionString =
     @$"Host={builder.Configuration["DATABASE_HOST_SUPABASE"]};
-                        Port={builder.Configuration["DATABASE_PORT_SUPABASE"]};
-                        Database={builder.Configuration["DEFAULT_DATABASE_NAME"]};
-                        User Id={builder.Configuration["DATABASE_USERNAME_SUPABASE"]};
-                        Password={builder.Configuration["DATABASE_PASSWORD_SUPABASE"]};";
+    Port={builder.Configuration["DATABASE_PORT_SUPABASE"]};
+    Database={builder.Configuration["DEFAULT_DATABASE_NAME"]};
+    User Id={builder.Configuration["DATABASE_USERNAME_SUPABASE"]};
+    Password={builder.Configuration["DATABASE_PASSWORD_SUPABASE"]};";
 builder.Services.AddTransient<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
 
 //TODO make this method abstract and extract it into extesions/helpers
