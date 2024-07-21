@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Dapper.Contrib.Extensions;
 
-namespace Forging.Api.Models
+namespace Forging.Domain.Models
 {
     [Table("roles")]
     public class Role

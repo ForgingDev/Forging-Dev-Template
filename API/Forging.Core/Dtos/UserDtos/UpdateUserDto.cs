@@ -1,4 +1,4 @@
-namespace Forging.Api.Dtos
+namespace Forging.Core.Dtos
 {
     public class UpdateUserDto
     {

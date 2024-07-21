@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Forging.Api.Models
+namespace Forging.Domain.Models
 {
     [Table("users")]
     public class User
@@ -32,9 +32,7 @@ namespace Forging.Api.Models
         [Description("joined_at")]
         public DateTime JoinedAt { get; set; }
 
-
         [Description("roles")]
-
         public List<string> Roles { get; set; }
     }
 }

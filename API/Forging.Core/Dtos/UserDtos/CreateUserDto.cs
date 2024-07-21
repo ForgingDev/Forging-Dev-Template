@@ -1,4 +1,4 @@
-namespace Forging.Api.Dtos
+namespace Forging.Core.Dtos
 {
     public class CreateUserDto
     {
@@ -7,7 +7,7 @@ namespace Forging.Api.Dtos
         public List<string> Email { get; set; }
         public List<string> PhoneNumber { get; set; }
 
-        public List<string>? Roles { get; set; }
+        public List<string>? Roles { get; set; } = new List<string>();
 
         public string ImageUrl { get; set; }
         public string FirstName { get; set; }
